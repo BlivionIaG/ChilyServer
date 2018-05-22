@@ -59,7 +59,6 @@ private:
     const uint keyLength = 16;
     const uint writeWaitTime = 3000;
     const std::string serverId = "SERVER";
-    const uint maxNetBufferLength = 65536;
 };
 
 #endif // QT_GENERICSERVER_H
