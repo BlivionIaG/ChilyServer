@@ -37,13 +37,22 @@ void QT_GenericServer::clientConnected() {
 void QT_GenericServer::clientReceive() {
     auto client = find(qobject_cast<QTcpSocket *>(sender()));
 
-    auto tmpBuffer = client->clientSocket->readAll();
+    while (client->clientSocket->canReadLine()) {
+        auto tmpBuffer = client->clientSocket->readLine();
+
+        if (tmpBuffer.size() <= 0) {
+            qDebug() << "Error: " << client.key() << " has been disconnected !";
+        } else if(!action(client.key(), tmpBuffer)){
+            buffer.append(tmpBuffer);
+        }
+    }
+    /*auto tmpBuffer = client->clientSocket->readAll();
 
     if (tmpBuffer.size() <= 0) {
         qDebug() << "Error: " << client.key() << " has been disconnected !";
     } else if(!action(client.key(), tmpBuffer.toStdString())){
         buffer.append(tmpBuffer.toStdString());
-    }
+    }*/
 }
 
 void QT_GenericServer::clientDisconnected() {
@@ -62,8 +71,8 @@ QString QT_GenericServer::addClient(QTcpSocket *socket) {
 
     clients.insert(id, tmp);
 
-    send(id,
-         serverId + "@auth:2 " + id.toStdString().c_str() + " " + tmp.clientKey);
+
+    send(id, serverId + "@auth:2 " + id.toStdString().c_str() + " " + tmp.clientKey);
 
     return id;
 }
@@ -88,8 +97,8 @@ bool QT_GenericServer::send(QString id, std::string message) {
         return false;
     }
 
-    //tmp.clientSocket->write((message).c_str()+'\n');
-    tmp.clientSocket->write(message.c_str());
+    tmp.clientSocket->write((message).c_str());
+    tmp.clientSocket->write('\n');
 
     return tmp.clientSocket->waitForBytesWritten(writeWaitTime);
 }
