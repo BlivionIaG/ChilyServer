@@ -88,8 +88,8 @@ bool QT_GenericServer::send(QString id, std::string message) {
         return false;
     }
 
+    //tmp.clientSocket->write((message).c_str()+'\n');
     tmp.clientSocket->write(message.c_str());
-    tmp.clientSocket->flush();
 
     return tmp.clientSocket->waitForBytesWritten(writeWaitTime);
 }
