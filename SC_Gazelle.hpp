@@ -10,7 +10,6 @@ public:
   ~SC_Gazelle() {}
 
   std::string getType() const { return "Gazelle"; }
-  void attack(SC_Animal &target) {}
 
 protected:
 };

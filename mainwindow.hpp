@@ -27,7 +27,8 @@ public:
     explicit MainWindow(int width = 800, int height = 600, QString title = "Chily Con Carne Server", QWidget *parent = 0);
     ~MainWindow();
 
-    void startSimulation();
+    void startSimulation(int width = 30, int height=15, int lions = 3, int gazelles = 9);
+    void println(const QString line);
 public slots:
     void update();
     void initSimulation();
@@ -49,6 +50,8 @@ private:
     /* Logs */
     std::shared_ptr<SC_Register> logs;
     std::shared_ptr<SC_Environnement> world;
+
+    bool pause;
 
     const int refreshDelay = 20;
 };

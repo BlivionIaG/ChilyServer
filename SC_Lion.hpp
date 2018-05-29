@@ -11,7 +11,7 @@ public:
 
   std::string getType() const { return "Lion"; }
   void attack(SC_Animal &target);
-  int getKills() const { return kills; };
+  int getKills() const { return kills; }
 
 protected:
   int kills;

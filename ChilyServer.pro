@@ -47,3 +47,5 @@ FORMS += \
         mainwindow.ui
 
 CONFIG += c++17
+
+QMAKE_CXXFLAGS += -O3

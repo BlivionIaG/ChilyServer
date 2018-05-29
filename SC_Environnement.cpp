@@ -1,5 +1,10 @@
 #include "SC_Environnement.hpp"
 
+SC_Environnement::SC_Environnement(int maxX, int maxY) : maxX{maxX}, maxY{maxY} {
+    logs = std::make_shared<SC_Register>();
+    logs->addToLog(logs->getID() + "@createEnvironnement:2 "+ std::to_string(getMaxX())+ " " + std::to_string(getMaxY()));
+}
+
 SC_Environnement::~SC_Environnement()
 {
     auto tmp = animals["Lion"];
@@ -13,6 +18,10 @@ SC_Environnement::~SC_Environnement()
     clearAnimalsToDelete();
 }
 
+void SC_Environnement::addAnimal(std::string type, int id, int x, int y, int hp){
+    addAnimal(std::make_shared<SC_Animal>(id, x, y, hp), type);
+}
+
 void SC_Environnement::addAnimal(std::shared_ptr<SC_Animal> animal, std::string type)
 {
     if (!type.compare(""))
@@ -20,7 +29,7 @@ void SC_Environnement::addAnimal(std::shared_ptr<SC_Animal> animal, std::string 
         type = animal->getType();
     }
 
-    logs->addToLog(logs->getID() + "@addAnimal:2 " + type + " " + std::to_string(animal->getID()));
+    logs->addToLog(logs->getID() + "@addAnimal:5 " + type + " " + std::to_string(animal->getID()) + " " + std::to_string(animal->getX()) + " " + std::to_string(animal->getY()) + " " + std::to_string(animal->getHP()));
 
     animals[type].push_back(animal);
 }
@@ -29,6 +38,21 @@ void SC_Environnement::removeAnimal(std::shared_ptr<SC_Animal> animal)
 {
     logs->addToLog(logs->getID() + "@removeAnimal:2 " + animal->getType() + " " + std::to_string(animal->getID()));
     animalsToDelete.push_back(animal);
+}
+
+
+void SC_Environnement::attack(std::string attackerType, int attackerId, std::string victimType, int victimId){
+    auto attackerTmp = animals[attackerType];
+    auto victimTmp = animals[victimType];
+
+    auto attacker = findAnimal(attackerTmp, attackerId);
+    auto victim = findAnimal(victimTmp, victimId);
+
+    attacker->get()->attack(*victim->get());
+}
+
+std::vector<std::shared_ptr<SC_Animal>>::iterator SC_Environnement::findAnimal(std::vector<std::shared_ptr<SC_Animal>> v, int id){
+    return std::find_if(v.begin(), v.end(), [id](std::shared_ptr<SC_Animal> a) { return a->getID() == id; });
 }
 
 int SC_Environnement::moveAnimals()
@@ -45,6 +69,22 @@ int SC_Environnement::moveAnimals()
     }
 
     return mouvement;
+}
+
+void SC_Environnement::move(std::string type, int id, std::string direction, int pas){
+    auto animal = findAnimal(animals[type], id)->get();
+
+    if(!direction.compare("LEFT")){
+        animal->setX(animal->getX() - pas);
+    }else if(!direction.compare("RIGHT")){
+        animal->setX(animal->getX() + pas);
+    }else  if(!direction.compare("UP")){
+        animal->setY(animal->getY() - pas);
+    }else if(!direction.compare("DOWN")){
+        animal->setY(animal->getY() + pas);
+    }else {
+        return;
+    }
 }
 
 int SC_Environnement::move(std::shared_ptr<SC_Animal> animal)
@@ -77,9 +117,9 @@ int SC_Environnement::move(std::shared_ptr<SC_Animal> animal)
     {
         direction = entAleat(0, 4);
         if ((direction == 0 && animal->getX() > 0) ||
-            (direction == 1 && animal->getX() < maxX) ||
-            (direction == 2 && animal->getY() > 0) ||
-            (direction == 3 && animal->getY() < maxY))
+                (direction == 1 && animal->getX() < maxX) ||
+                (direction == 2 && animal->getY() > 0) ||
+                (direction == 3 && animal->getY() < maxY))
         {
             valid = true;
         }
@@ -143,22 +183,22 @@ void SC_Environnement::populate(int nblion, int nbgazelle)
     for (auto i{0}; i < nblion - 1; ++i)
     {
         addAnimal(
-            std::make_shared<SC_Lion>(
-                SC_Lion(
-                    getPopulationSize(),
-                    entAleat(0, maxX),
-                    entAleat(0, maxY))),
-            "Lion");
+                    std::make_shared<SC_Lion>(
+                        SC_Lion(
+                            getPopulationSize(),
+                            entAleat(0, maxX),
+                            entAleat(0, maxY))),
+                    "Lion");
     }
     for (auto i{0}; i < nbgazelle - 1; ++i)
     {
         addAnimal(
-            std::make_shared<SC_Gazelle>(
-                SC_Gazelle(
-                    getPopulationSize(),
-                    entAleat(0, maxX),
-                    entAleat(0, maxY))),
-            "Gazelle");
+                    std::make_shared<SC_Gazelle>(
+                        SC_Gazelle(
+                            getPopulationSize(),
+                            entAleat(0, maxX),
+                            entAleat(0, maxY))),
+                    "Gazelle");
     }
 }
 

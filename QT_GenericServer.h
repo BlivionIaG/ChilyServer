@@ -6,6 +6,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QString>
+#include <QTimer>
 
 #include <random>
 #include <string>
@@ -52,6 +53,7 @@ public slots:
 
 private:
     bool alive;
+    QTimer *timer;
     QTcpServer *server;
     QVector<std::string> buffer;
     QMap<QString, QT_ClientData> clients;

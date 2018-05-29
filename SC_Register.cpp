@@ -63,5 +63,5 @@ std::string SC_Register::getLine()
         return cmdFormat::toString(log[readCursor++]);
     }
 
-    return nullptr;
+    return "";
 }

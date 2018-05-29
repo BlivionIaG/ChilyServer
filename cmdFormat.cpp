@@ -27,7 +27,7 @@ cmdFormat::cmdFormat cmdFormat::parseCommand(std::string entry)
 		out.arglen = std::atoi(tmp[1].c_str());
 	tmp.clear();
 
-	if (out.id.length() < 1 || out.command.length() < 1 || out.arglen < 0)
+    if (out.id.length() < 1 || out.command.length() < 1)
 	{
 		out.valid = false;
 	}
