@@ -43,8 +43,7 @@ HEADERS += \
     SC_Register.hpp \
     QT_GenericServer.h
 
-FORMS += \
-        mainwindow.ui
+FORMS +=
 
 CONFIG += c++17
 

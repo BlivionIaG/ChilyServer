@@ -24,7 +24,7 @@ public:
     void removeAnimal(std::shared_ptr<SC_Animal> animal);
     void attack(std::string attackerType, int attackerId, std::string victimType, int victimId);
     std::vector<std::shared_ptr<SC_Animal>>::iterator findAnimal(std::vector<std::shared_ptr<SC_Animal>> v, int id);
-
+    void damage(std::string type, int id, int value);
 
     void populate(int nblion, int nbgazelle);
     size_t getPopulationSize();
