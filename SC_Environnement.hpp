@@ -28,6 +28,7 @@ public:
 
     void populate(int nblion, int nbgazelle);
     size_t getPopulationSize();
+    std::map<std::string, std::vector<std::shared_ptr<SC_Animal>>> getAnimals() const { return animals; }
 
     int moveAnimals();
     void move(std::string type, int id, std::string direction, int pas);

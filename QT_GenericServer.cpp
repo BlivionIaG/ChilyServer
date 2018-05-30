@@ -38,21 +38,15 @@ void QT_GenericServer::clientReceive() {
     auto client = find(qobject_cast<QTcpSocket *>(sender()));
 
     while (client->clientSocket->canReadLine()) {
-        auto tmpBuffer = client->clientSocket->readLine();
+        auto tmp = client->clientSocket->readLine();
+        QString tmpBuffer = QString(tmp).trimmed();
 
         if (tmpBuffer.size() <= 0) {
             qDebug() << "Error: " << client.key() << " has been disconnected !";
-        } else if(!action(client.key(), tmpBuffer)){
-            buffer.append(tmpBuffer);
+        } else if(!action(client.key(), tmpBuffer.toStdString())){
+            buffer.append(tmpBuffer.toStdString());
         }
     }
-    /*auto tmpBuffer = client->clientSocket->readAll();
-
-    if (tmpBuffer.size() <= 0) {
-        qDebug() << "Error: " << client.key() << " has been disconnected !";
-    } else if(!action(client.key(), tmpBuffer.toStdString())){
-        buffer.append(tmpBuffer.toStdString());
-    }*/
 }
 
 void QT_GenericServer::clientDisconnected() {
@@ -97,8 +91,7 @@ bool QT_GenericServer::send(QString id, std::string message) {
         return false;
     }
 
-    tmp.clientSocket->write((message).c_str());
-    tmp.clientSocket->write('\n');
+    tmp.clientSocket->write((message+"\n").c_str());
 
     return tmp.clientSocket->waitForBytesWritten(writeWaitTime);
 }
