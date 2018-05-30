@@ -28,7 +28,7 @@ public:
   void addY(int y) { this->y += y; }
   void addHP(int hp) { this->hp += hp; }
 
-  virtual void attack(SC_Animal &target){target.setHP(target.getHP()/4);}
+  virtual void attack(SC_Animal &target){target.setHP(0);}
   virtual std::string getType() const { return "Animal"; }
   virtual std::string getClass() const { return "Animal"; }
   virtual int getKills() const { return 0; }

@@ -85,6 +85,12 @@ void MainWindow::update(){
             }else if(!cmd.args[0].compare("off")){
                 pause = false;
             }
+        }else if(!cmd.command.compare("delay")){
+            if(cmd.args.size() < 1){
+                server->send(QString::fromStdString(cmd.id), cmd.id + "@delay:2 error no parameters");
+            }else{
+                timer->setInterval(std::atoi(cmd.args[0].c_str()));
+            }
         }
     }
 
