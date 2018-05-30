@@ -7,18 +7,18 @@ MainWindow::MainWindow(int width, int height, QString title, QWidget *parent) :
     this->setMinimumHeight(height);
     this->setMinimumWidth(width);
 
-    console = new QTextEdit;
+    console = new QTextEdit; // "Console" de reception et d'info basique du serveur
     hlayout->addWidget(console);
 
-    startServer = new QPushButton("START SERVER");
+    startServer = new QPushButton("START SERVER"); // bouton pour démarrer le serveur
     hlayout->addWidget(startServer);
 
-    mainWidget->setLayout(hlayout);
+    mainWidget->setLayout(hlayout); //Ajout du layout au widget principal
     this->setCentralWidget(mainWidget);
 
-    timer = new QTimer(this);
+    timer = new QTimer(this); //Déclaration du timer
 
-    pause = false;
+    pause = false; //Pas de pause par défaut
 
     println("Création fenêtre principale ...");
 
@@ -49,7 +49,7 @@ void MainWindow::update(){
     auto tmp = server->receive();
 
     for(auto &i : tmp){
-        qDebug() << QString::fromStdString(i);
+        println(QString::fromStdString(i));
         auto cmd = cmdFormat::parseCommand(i);
 
         if (!cmd.command.compare("simulation")) {
@@ -100,7 +100,7 @@ void MainWindow::update(){
         auto btmp = logs->getLine();
         if(btmp.size() > 0) {
             server->broadcast(btmp);
-            println(QString::fromStdString(btmp));
+            //println(QString::fromStdString(btmp));
         }
     }
 }

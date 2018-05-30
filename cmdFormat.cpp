@@ -2,31 +2,32 @@
 
 cmdFormat::cmdFormat cmdFormat::parseCommand(std::string entry)
 {
-	cmdFormat out;
+    cmdFormat out; //Commande formatée à renvoyer
 
-	std::vector<std::string> tmp;
+    std::vector<std::string> tmp;
 	std::string stmp;
 
-	tmp = split(entry, ' ');
+    tmp = split(entry, ' '); //Séparation des arguments et commande
 	stmp = tmp[0];
 	tmp.erase(tmp.begin());
-	out.args = tmp;
-	tmp.clear();
+    out.args = tmp; //Séparation des arguments finie
+    tmp.clear();
 
-	tmp = split(stmp, '@');
+    tmp = split(stmp, '@'); //On récupére l'identifiant et la cmd
 	if (tmp.size() > 0)
-		out.id = tmp[0];
+        out.id = tmp[0]; //Séparation id
 	if (tmp.size() > 1)
-		out.command = tmp[1];
+        out.command = tmp[1]; //Séparation cmd
 	tmp.clear();
 
-	tmp = split(out.command, ':');
+    tmp = split(out.command, ':'); //Récupération du nb d'arguments
 	if (tmp.size() > 0)
-		out.command = tmp[0];
+        out.command = tmp[0]; //Récup commande
 	if (tmp.size() > 1)
-		out.arglen = std::atoi(tmp[1].c_str());
+        out.arglen = std::atoi(tmp[1].c_str()); //Récup nb args
 	tmp.clear();
 
+    /*Vérification si commande valide */
     if (out.id.length() < 1 || out.command.length() < 1)
 	{
 		out.valid = false;
@@ -37,7 +38,6 @@ cmdFormat::cmdFormat cmdFormat::parseCommand(std::string entry)
 	}
 
 	//Arglen correction
-
 	if (out.arglen < out.args.size())
 	{
 		for (auto i{out.arglen}; i < out.args.size() - 1; ++i)
